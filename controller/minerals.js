@@ -6,13 +6,14 @@ let page = null;
 /* Constants */
 const BASE_URL = 'https://www.minerals.net/GemStoneMain.aspx';
 
-const amazon = {
+const minerals = {
 
     initialize: async () => {
         console.log('Starting the scraper..');
 
         browser = await puppeteer.launch({
-            headless: false
+            headless: false,
+            defaultViewport: false,
         })
         
         page = await browser.newPage();
@@ -28,4 +29,4 @@ const amazon = {
 
 }
 
-module.exports = amazon;
+module.exports = minerals;
