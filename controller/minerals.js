@@ -22,11 +22,11 @@ const minerals = {
   getGemsNameAndURL: async () => {
     console.log("Getting gems name and URL..");
     const gemLinks = await page.$$eval(
-      "#ctl00_ContentPlaceHolder1_DataList1 td div > div > a.mineralimg",
+      "#ctl00_ContentPlaceHolder1_DataList1 td:nth-child(2) div > div > a.mineralimg",
       (group) => group.map((g) => ({ url: g.href }))
     );
     const gemsName = await page.$$eval(
-      "#ctl00_ContentPlaceHolder1_DataList1 td div > div > a.bluelink",
+      "#ctl00_ContentPlaceHolder1_DataList1 td:nth-child(2) div > div > a.bluelink",
       (group) => group.map((g) => ({ name: g.innerText }))
     );
 
@@ -49,39 +49,49 @@ const minerals = {
       await page.waitForNavigation();
       let details = await page.evaluate(() => {
         const getInnertTextFor = (selector) => {
-          return document.querySelectorAll(selector)[1]
-            ? document.querySelectorAll(selector)[1].innerText
+          return document.querySelector(selector)
+            ? document.querySelector(selector).innerText
             : "NA";
         };
 
         let about = document.querySelector(".font-size-control").innerText;
         let formula = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trChemicalFormula td"
+          "#ctl00_ContentPlaceHolder1_trChemicalFormula td:nth-child(2)"
         );
-        let color = getInnertTextFor("#ctl00_ContentPlaceHolder1_trColor td");
+        let color = getInnertTextFor("#ctl00_ContentPlaceHolder1_trColor td:nth-child(2)");
         let hardness = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trHardness td"
+          "#ctl00_ContentPlaceHolder1_trHardness td:nth-child(2)"
         );
         let crystalSystem = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trCrystalSystem td"
+          "#ctl00_ContentPlaceHolder1_trCrystalSystem td:nth-child(2)"
         );
         let refractiveIndex = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trRefractiveIndex td"
+          "#ctl00_ContentPlaceHolder1_trRefractiveIndex td:nth-child(2)"
         );
-        let sg = getInnertTextFor("#ctl00_ContentPlaceHolder1_trSG td");
+        let sg = getInnertTextFor("#ctl00_ContentPlaceHolder1_trSG td:nth-child(2)");
         let transparency = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trTransparency td"
+          "#ctl00_ContentPlaceHolder1_trTransparency td:nth-child(2)"
         );
         let doubleRefraction = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trDoubleRefraction td"
+          "#ctl00_ContentPlaceHolder1_trDoubleRefraction td:nth-child(2)"
         );
-        let luster = getInnertTextFor("#ctl00_ContentPlaceHolder1_trLuster td");
+        let luster = getInnertTextFor("#ctl00_ContentPlaceHolder1_trLuster td:nth-child(2)");
         let clevage = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trCleavage td"
+          "#ctl00_ContentPlaceHolder1_trCleavage td:nth-child(2)"
         );
         let mineralClass = getInnertTextFor(
-          "#ctl00_ContentPlaceHolder1_trMineralClass td"
+          "#ctl00_ContentPlaceHolder1_trMineralClass td:nth-child(2)"
         );
+        let allAbout = getInnertTextFor(
+          "#ctl00_ContentPlaceHolder1_lblAllAbout"
+        );
+        let uses = getInnertTextFor(
+          "#ctl00_ContentPlaceHolder1_lblUses"
+        );
+        let resources = getInnertTextFor(
+          "#ctl00_ContentPlaceHolder1_lblSource"
+        );
+
         return {
           about,
           formula,
@@ -94,6 +104,9 @@ const minerals = {
           luster,
           clevage,
           mineralClass,
+          allAbout,
+          uses,
+          resources,
         };
       });
       await page.close();
